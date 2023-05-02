@@ -1,0 +1,61 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+
+name: Build and apply
+
+# This workflow is triggered whenever commits are pushed to the main branch
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+# defaults:
+#   run:
+#     shell: bash
+#     # Define the working directory for all run steps in the workflow
+#     working-directory: ./web
+
+jobs:
+
+  deploy_on_aws:
+    environment: test
+    name: 'Deploy to aws'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+      name: 'Checkout repository'
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@05b148adc31e091bafbaf404f745055d4d3bc9d2
+      with:
+        role-to-assume: arn:aws:iam::616468891164:role/test-github-actions
+        role-session-name: tempsession
+        aws-region: ap-south-1
+
+    - name: Deploy changes
+      run: |
+        ls ; pwd
