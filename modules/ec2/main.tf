@@ -2,9 +2,8 @@ module "ec2_cluster" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 2.0"
 
-  name = var.app_name
-    instance_count         = length(var.public_subnets_ids)
-  # instance_count              = 1
+  name                        = var.app_name
+  instance_count              = length(var.public_subnets_ids)
   ami                         = var.ami
   instance_type               = "t3a.medium"
   monitoring                  = false

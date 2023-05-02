@@ -21,5 +21,5 @@ variable "cidr" {
 }
 variable "open_ingress_ports" {
   type    = list(number)
-  default = [80, 443, 22]
+  default = [80]
 }

@@ -13,7 +13,6 @@ resource "aws_security_group" "this" {
       to_port     = port.value
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
-      # security_groups = [var.vpc_security_group_ids]
     }
   }
   egress {
